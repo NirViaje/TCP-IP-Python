@@ -18,6 +18,19 @@ def main(client_dashboard, client_feedback):
     time.sleep(5)
     client_feedback.JointMovJ(0,30,0,0,0,0)
     time.sleep(5)
+    
+    gPose = client_dashboard.GetPose()
+    gPose = list(map(float, gPose[1:len(gPose)-1].split(',')))
+    print("\033[0;37;45mGetPose: \033[0m", gPose[0], gPose[1], gPose[2], gPose[3], gPose[4], gPose[5])#[1:21])
+    
+    client_dashboard.RobotMode()
+    time.sleep(.5)
+    
+    client_feedback.MovJ(CartP[0], CartP[1], CartP[2], CartP[3], CartP[4]+20, CartP[5])
+    time.sleep(1.5)
+    client_feedback.MovJ(CartP[0], CartP[1], CartP[2], CartP[3], CartP[4], CartP[5])
+    time.sleep(1.5)
+
     print('!!!!!!END!!!!!!')
 
 # The feedback information about port 30003 is displayed
