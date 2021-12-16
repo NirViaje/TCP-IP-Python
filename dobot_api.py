@@ -51,7 +51,7 @@ class dobot_api_dashboard:
         string = "EnableRobot()"
         print(string)
         self.socket_dashboard.send(str.encode(string,'utf-8'))
-        self.WaitReply()
+        return self.WaitReply()
         
     def DisableRobot(self):
         """
@@ -291,6 +291,16 @@ class dobot_api_dashboard:
         self.socket_dashboard.send(str.encode(string,'utf-8'))
         self.WaitReply()
 
+    def GetPose(self):
+        """
+        GetPose
+        https://github.com/Dobot-Arm/TCP-IP-Protocol?from=from_parent_mindnote#339-getpose
+        """
+        string = "GetPose()"
+        print(string)
+        self.socket_dashboard.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
     def RunScript(self, project_name):
         """
         Run the script file
@@ -327,6 +337,33 @@ class dobot_api_dashboard:
         print(string)
         self.socket_dashboard.send(str.encode(string,'utf-8'))
         self.WaitReply()
+
+    # /dobot/userdata/project/process/trajectory/
+    def GetTraceStartPose(self, traceName):
+        string = "GetTraceStartPose({:s})".format(traceName)
+        print(string)
+        self.socket_dashboard.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
+    # /dobot/userdata/project/process/trajectory/
+    def GetPathStartPose(self, traceName):
+        string = "GetPathStartPose({:s})".format(traceName)
+        print(string)
+        self.socket_dashboard.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
+    # /dobot/userdata/project/process/trajectory/
+    def HandleTrajPoints(self, traceName):
+        string = "HandleTrajPoints({:s})".format(traceName)
+        print(string)
+        self.socket_dashboard.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
+    def HandleTrajPoints_state(self):
+        string = "HandleTrajPoints()"
+        print(string)
+        self.socket_dashboard.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
 
     def GetHoldRegs(self, id, addr, count, type):
         """
@@ -380,7 +417,8 @@ class dobot_api_dashboard:
         Read the return value
         """
         data = self.socket_dashboard.recv(1024)
-        print('receive:', bytes.decode(data,'utf-8'))
+        print('\033[0;37;42mreceive:\033[0m', bytes.decode(data,'utf-8'))
+        return bytes.decode(data,'utf-8')   # data
 
     def close(self):
         """
@@ -565,6 +603,41 @@ class dobot_api_feedback:
         string = "ServoP({:f},{:f},{:f},{:f},{:f},{:f})".format(x,y,z,a,b,c)
         print(string)
         self.socket_feedback.send(str.encode(string,'utf-8'))
+
+    # MoveJog
+    def MoveJog(self, axisID):
+        string = "ServoP({:s})".format(axisID)
+        print(string)
+        self.socket_feedback.send(str.encode(string,'utf-8'))
+
+    # StartTrace
+    # /dobot/userdata/project/process/trajectory/
+    def StartTrace(self, traceName):
+        string = "StartTrace({:s})".format(traceName)
+        print(string)
+        self.socket_feedback.send(str.encode(string,'utf-8'))
+
+    # StartPath
+    # /dobot/userdata/project/process/trajectory/
+    def StartPath(self, traceName, const, cart):
+        string = "StartPath({:s},{:d},{:d})".format(traceName,const,cart)
+        print(string)
+        self.socket_feedback.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
+    # /dobot/userdata/project/process/trajectory/
+    def StartFCTrace(self, traceName):
+        string = "StartFCTrace({:s})".format(traceName)
+        print(string)
+        self.socket_feedback.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
+
+    # /dobot/userdata/project/process/trajectory/
+    def StartFCTrace(self, traceName, const, cart):
+        string = "StartPath({:s},{:d},{:d})".format(traceName,const,cart)
+        print(string)
+        self.socket_feedback.send(str.encode(string,'utf-8'))
+        return self.WaitReply()
 
     def WaitReply(self):
         """
