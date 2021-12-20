@@ -20,7 +20,8 @@ MyType=np.dtype([('len', np.int64, ), ('digital_input_bits', np.int64, ),
                 ('TCP_speed_actual', np.float64, (6,)), ('TCP_force', np.float64, (6,)),
                 ('Tool_vector_target', np.float64, (6,)), ('TCP_speed_target', np.float64, (6,)), 
                 ('motor_temperatures', np.float64, (6,)), ('joint_modes', np.float64, (6,)), 
-                ('v_actual', np.float64, (6,)), ('dummy', np.float64, (9,6))
+                ('v_actual', np.float64, (6,)), ('dummy1', np.float64, (14,)),
+                ('m_actual', np.float64, (6,)), ('dummy2', np.float64, (34,))
                 ])
 
 class dobot_api_dashboard:
@@ -427,6 +428,33 @@ class dobot_api_dashboard:
         if(self.socket_dashboard != 0):
             self.socket_dashboard.close()
 
+class dobot_api_rt_feedback:
+    """
+    Define class dobot_api_feedback to establish a connection to Dobot
+    """
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
+        self.socket_feedback = 0 
+
+        if self.port == 30004:
+            try:      
+                self.socket_feedback = socket.socket() 
+                self.socket_feedback.connect((self.ip, self.port))
+            except socket.error:
+                print("Fail to connect feedback server !", socket.error)
+        else:
+            print("Connect to realtime feedback server need use port 30004 !")
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        """
+        Close port
+        """
+        if(self.socket_feedback != 0):
+            self.socket_feedback.close()
 
 class dobot_api_feedback:
     """
