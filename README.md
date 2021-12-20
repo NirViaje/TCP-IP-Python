@@ -1,3 +1,12 @@
+# What's new in this fork
+
+- 30004 port realtime feedback supported
+   - with m_actual supported
+- multiple commands supported
+   - GetSixForceData/GetAngle/GetPose added
+   - GetTraceStartPose/GetPathStartPose/HandleTrajPoints/HandleTrajPoints_state added
+   - PositiveSolution/InverseSolution pending
+
 # 先读我
 
 ## 1. 运行 Demo 需以下步骤
